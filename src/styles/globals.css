@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 43 38% 96%;
+    --foreground: 178 21% 11%;
+    --card: 42 42% 99%;
+    --card-foreground: 178 21% 11%;
+    --primary: 164 73% 24%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 41 36% 89%;
+    --secondary-foreground: 180 17% 12%;
+    --muted: 42 31% 91%;
+    --muted-foreground: 177 11% 36%;
+    --accent: 28 89% 55%;
+    --accent-foreground: 176 23% 10%;
+    --destructive: 0 72% 48%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 42 18% 82%;
+    --input: 42 18% 82%;
+    --ring: 164 73% 24%;
+    --earth-moss: 148 39% 28%;
+    --earth-forest: 164 73% 18%;
+    --earth-canopy: 158 52% 34%;
+    --earth-fern: 92 38% 56%;
+    --earth-sand: 42 46% 86%;
+    --earth-clay: 22 61% 47%;
+    --earth-sun: 39 95% 58%;
+    --earth-river: 190 54% 35%;
+    --earth-night: 176 28% 9%;
+  }
+
+  .dark {
+    --background: 176 28% 9%;
+    --foreground: 42 38% 94%;
+    --card: 176 24% 12%;
+    --card-foreground: 42 38% 94%;
+    --primary: 150 48% 48%;
+    --primary-foreground: 176 28% 9%;
+    --secondary: 174 18% 18%;
+    --secondary-foreground: 42 38% 94%;
+    --muted: 176 18% 16%;
+    --muted-foreground: 43 18% 70%;
+    --accent: 39 92% 58%;
+    --accent-foreground: 176 28% 9%;
+    --destructive: 0 72% 56%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 176 15% 22%;
+    --input: 176 15% 22%;
+    --ring: 150 48% 48%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  img {
+    @apply max-w-full;
+  }
+}
+
+@layer components {
+  .section-shell {
+    @apply container py-10 sm:py-14 lg:py-18;
+  }
+
+  .eyebrow {
+    @apply text-xs font-bold uppercase tracking-[0.18em] text-primary;
+  }
+
+  .display-title {
+    @apply font-display text-3xl font-semibold leading-tight tracking-normal sm:text-4xl lg:text-5xl;
+  }
+
+  .premium-surface {
+    @apply border border-white/50 bg-card/[0.92] shadow-soft backdrop-blur dark:border-white/10 dark:bg-card/[0.88];
+  }
+
+  .interactive-lift {
+    @apply transition duration-300 ease-spring hover:-translate-y-1 hover:shadow-premium;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .safe-bottom-nav {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+}
