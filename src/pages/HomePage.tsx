@@ -1,56 +1,369 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Compass, ShieldCheck, Sparkles, Star } from "lucide-react";
+import { animate, motion, useInView, useReducedMotion, useScroll, useSpring, useTransform, type Variants } from "framer-motion";
+import {
+  Award,
+  CalendarDays,
+  Camera,
+  CheckCircle2,
+  ChevronRight,
+  Leaf,
+  MapPin,
+  Mountain,
+  Play,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  Star,
+  UsersRound,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { routes } from "@/lib/constants";
 
+const heroImage =
+  "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=2200&q=82";
+
 const trustSignals = [
-  { icon: ShieldCheck, label: "Réservations sécurisées" },
-  { icon: Star, label: "Avis visiteurs vérifiés" },
-  { icon: Compass, label: "Exploration par zones" },
+  { icon: ShieldCheck, label: "Guides certifiés", detail: "Partenaires locaux vérifiés" },
+  { icon: Star, label: "4,9/5 visiteurs", detail: "Avis authentifiés" },
+  { icon: CheckCircle2, label: "Annulation flexible", detail: "Réservation sécurisée" },
 ];
 
+const stats = [
+  { value: "42", label: "sentiers balisés", suffix: "+" },
+  { value: "18", label: "expériences guidées", suffix: "" },
+  { value: "97", label: "satisfaction visiteurs", suffix: "%" },
+];
+
+const discoveryCards = [
+  {
+    icon: Mountain,
+    title: "Randonnées panoramiques",
+    description: "Belvédères au lever du soleil, crêtes sauvages et pauses naturalistes.",
+    meta: "À partir de 2h",
+    to: routes.activities,
+  },
+  {
+    icon: Camera,
+    title: "Safaris photo éthiques",
+    description: "Spots confidentiels, lumière dorée et observation respectueuse de la faune.",
+    meta: "Petit groupe",
+    to: routes.activities,
+  },
+  {
+    icon: Leaf,
+    title: "Zones protégées",
+    description: "Choisissez votre ambiance : forêt primaire, cascades, prairies ou rivières.",
+    meta: "Carte interactive",
+    to: routes.zones,
+  },
+];
+
+const quickSearches = ["Lever du soleil", "Cascade", "Famille", "Observation faune"];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.08,
+    },
+  },
+} satisfies Variants;
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 18 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 90, damping: 18 },
+  },
+} satisfies Variants;
+
+function AnimatedNumber({ value, delay }: { value: number; delay: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const prefersReducedMotion = useReducedMotion();
+  const [displayValue, setDisplayValue] = useState(prefersReducedMotion ? value : 0);
+
+  useEffect(() => {
+    if (!isInView) {
+      return;
+    }
+
+    if (prefersReducedMotion) {
+      setDisplayValue(value);
+      return;
+    }
+
+    const controls = animate(0, value, {
+      delay,
+      duration: 1.05,
+      ease: [0.2, 0.8, 0.2, 1],
+      onUpdate: (latest) => setDisplayValue(Math.round(latest)),
+    });
+
+    return () => controls.stop();
+  }, [delay, isInView, prefersReducedMotion, value]);
+
+  return <span ref={ref}>{displayValue}</span>;
+}
+
+function AnimatedStat({ value, suffix, label, index }: (typeof stats)[number] & { index: number }) {
+  return (
+    <motion.div
+      className="rounded-2xl border border-white/15 bg-white/[0.11] p-4 shadow-glow backdrop-blur-md sm:p-5"
+      variants={itemVariants}
+      whileHover={{ y: -6, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 260, damping: 20 }}
+    >
+      <div className="flex items-end gap-1 font-display text-3xl font-semibold text-white sm:text-4xl">
+        <motion.span
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45 + index * 0.08, type: "spring", stiffness: 110, damping: 18 }}
+        >
+          <AnimatedNumber delay={0.45 + index * 0.08} value={Number(value)} />
+        </motion.span>
+        <span className="pb-1 text-xl text-accent">{suffix}</span>
+      </div>
+      <p className="mt-1 text-sm font-medium text-white/76">{label}</p>
+    </motion.div>
+  );
+}
+
+function SearchPanel() {
+  return (
+    <motion.form
+      className="premium-surface w-full rounded-[1.75rem] border-white/25 bg-white/[0.94] p-3 text-foreground shadow-[0_28px_90px_rgb(0_0_0_/_0.24)] sm:p-4 lg:max-w-xl"
+      variants={itemVariants}
+      whileHover={{ y: -4 }}
+      transition={{ type: "spring", stiffness: 220, damping: 24 }}
+      aria-label="Rechercher une expérience dans le parc"
+      onSubmit={(event) => event.preventDefault()}
+    >
+      <div className="grid gap-3 md:grid-cols-[1.1fr_0.9fr_auto]">
+        <label className="group relative block">
+          <span className="mb-2 flex items-center gap-2 px-2 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+            <MapPin className="h-3.5 w-3.5 text-primary" aria-hidden="true" /> Destination
+          </span>
+          <Input
+            className="h-14 rounded-2xl border-transparent bg-muted/70 pl-11 text-base shadow-inner transition group-hover:bg-muted focus-visible:ring-primary"
+            placeholder="Forêt, cascade, belvédère..."
+            aria-label="Destination souhaitée"
+          />
+          <Search className="pointer-events-none absolute bottom-4 left-4 h-5 w-5 text-primary" aria-hidden="true" />
+        </label>
+        <label className="group block">
+          <span className="mb-2 flex items-center gap-2 px-2 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+            <CalendarDays className="h-3.5 w-3.5 text-primary" aria-hidden="true" /> Quand
+          </span>
+          <Input
+            className="h-14 rounded-2xl border-transparent bg-muted/70 text-base shadow-inner transition group-hover:bg-muted focus-visible:ring-primary"
+            type="date"
+            aria-label="Date de visite"
+          />
+        </label>
+        <Button className="h-14 rounded-2xl px-6 text-base" size="lg" type="submit" variant="premium">
+          Explorer
+          <ChevronRight className="h-5 w-5" aria-hidden="true" />
+        </Button>
+      </div>
+      <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] sm:flex-wrap sm:overflow-visible">
+        {quickSearches.map((search) => (
+          <button
+            key={search}
+            className="shrink-0 rounded-full border border-primary/10 bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary transition duration-300 ease-spring hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            type="button"
+          >
+            {search}
+          </button>
+        ))}
+      </div>
+    </motion.form>
+  );
+}
+
+function DiscoveryCard({ icon: Icon, title, description, meta, to }: (typeof discoveryCards)[number]) {
+  return (
+    <motion.article variants={itemVariants} whileHover={{ y: -8 }} transition={{ type: "spring", stiffness: 260, damping: 22 }}>
+      <Link
+        to={to}
+        className="group block h-full rounded-[1.5rem] border border-white/12 bg-white/[0.11] p-4 text-white shadow-glow backdrop-blur-md transition duration-300 ease-spring hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:p-5"
+      >
+        <div className="mb-5 flex items-center justify-between gap-4">
+          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 text-accent transition duration-300 group-hover:scale-110 group-hover:bg-accent group-hover:text-accent-foreground">
+            <Icon className="h-6 w-6" aria-hidden="true" />
+          </span>
+          <Badge className="border-white/15 bg-white/12 text-white" variant="outline">
+            {meta}
+          </Badge>
+        </div>
+        <h3 className="font-display text-xl font-semibold">{title}</h3>
+        <p className="mt-2 text-sm leading-6 text-white/72">{description}</p>
+        <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-accent">
+          Découvrir <ChevronRight className="h-4 w-4 transition group-hover:translate-x-1" aria-hidden="true" />
+        </span>
+      </Link>
+    </motion.article>
+  );
+}
+
 export function HomePage() {
+  const prefersReducedMotion = useReducedMotion();
+  const { scrollY } = useScroll();
+  const rawY = useTransform(scrollY, [0, 700], [0, prefersReducedMotion ? 0 : 90]);
+  const imageY = useSpring(rawY, { stiffness: 70, damping: 28, mass: 0.4 });
+
   return (
     <PageTransition>
-      <section className="relative min-h-[calc(100vh-4rem)] overflow-hidden bg-foreground text-white">
-        <img
-          src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80"
-          alt="Paysage naturel verdoyant du parc"
-          className="absolute inset-0 h-full w-full object-cover opacity-55"
+      <section className="relative -mt-16 min-h-screen overflow-hidden bg-earth-night text-white lg:-mt-18" aria-labelledby="home-hero-title">
+        <motion.img
+          src={heroImage}
+          alt="Vallée sauvage baignée par une lumière dorée dans le parc national"
+          className="absolute inset-0 h-[112%] w-full object-cover will-change-transform"
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
+          style={{ y: imageY }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/25 to-foreground" />
-        <div className="container relative grid min-h-[calc(100vh-4rem)] content-center pb-20 pt-24">
-          <div className="max-w-3xl">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-md bg-white/12 px-3 py-2 text-sm backdrop-blur">
-              <Sparkles className="h-4 w-4" />
-              Expériences nature, guides locaux et activités réservables
-            </div>
-            <h1 className="text-4xl font-bold tracking-normal sm:text-5xl lg:text-6xl">Parc National</h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-white/86">
-              Explorez les zones protégées, comparez les activités, consultez les avis et réservez une immersion
-              adaptée à votre rythme.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg">
-                <Link to={routes.zones}>Explorer les zones</Link>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(255,196,87,0.30),transparent_28%),linear-gradient(115deg,rgba(5,22,18,0.92)_0%,rgba(8,38,30,0.72)_42%,rgba(5,22,18,0.34)_100%)]" />
+        <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-earth-night via-earth-night/70 to-transparent" />
+        <div className="pointer-events-none absolute left-1/2 top-24 h-72 w-72 -translate-x-1/2 rounded-full bg-accent/20 blur-3xl" />
+
+        <div className="container relative grid min-h-screen content-center gap-10 pb-14 pt-28 sm:pb-18 lg:grid-cols-[minmax(0,1fr)_minmax(370px,0.72fr)] lg:items-end lg:gap-12 lg:pt-32">
+          <motion.div className="max-w-4xl" initial="hidden" animate="visible" variants={containerVariants}>
+            <motion.div className="mb-5 flex flex-wrap items-center gap-3" variants={itemVariants}>
+              <Badge className="border-white/20 bg-white/12 px-3 py-2 text-white shadow-glow backdrop-blur" variant="outline">
+                <Sparkles className="h-4 w-4 text-accent" aria-hidden="true" /> Sélection premium 2026
+              </Badge>
+              <span className="inline-flex items-center gap-1 rounded-full bg-white/12 px-3 py-2 text-sm font-semibold text-white/90 backdrop-blur">
+                <Star className="h-4 w-4 fill-accent text-accent" aria-hidden="true" /> 4,9 · 2 400 avis voyageurs
+              </span>
+            </motion.div>
+
+            <motion.h1
+              className="max-w-4xl text-balance font-display text-5xl font-semibold leading-[0.94] tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl xl:text-8xl"
+              id="home-hero-title"
+              variants={itemVariants}
+            >
+              Explorez le parc comme une expérience inoubliable.
+            </motion.h1>
+            <motion.p className="mt-6 max-w-2xl text-balance text-lg leading-8 text-white/80 sm:text-xl" variants={itemVariants}>
+              Trouvez les plus beaux itinéraires, réservez des sorties guidées et vivez une immersion nature pensée
+              comme les meilleures expériences de voyage.
+            </motion.p>
+
+            <motion.div className="mt-8 flex flex-col gap-3 sm:flex-row" variants={itemVariants}>
+              <Button asChild className="h-14 rounded-2xl px-7 text-base" size="lg" variant="premium">
+                <Link to={routes.activities}>
+                  Réserver une expérience <ChevronRight className="h-5 w-5" aria-hidden="true" />
+                </Link>
               </Button>
-              <Button asChild size="lg" variant="secondary">
-                <Link to={routes.activities}>Voir les activités</Link>
+              <Button
+                asChild
+                className="h-14 rounded-2xl border-white/20 bg-white/12 px-7 text-base text-white backdrop-blur hover:bg-white/20"
+                size="lg"
+                variant="outline"
+              >
+                <Link to={routes.zones}>
+                  <Play className="h-5 w-5" aria-hidden="true" /> Découvrir les zones
+                </Link>
               </Button>
+            </motion.div>
+          </motion.div>
+
+          <motion.aside
+            className="grid gap-4 lg:justify-items-end"
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+            aria-label="Recherche, confiance et statistiques du parc"
+          >
+            <SearchPanel />
+            <div className="grid w-full grid-cols-1 gap-2 min-[430px]:grid-cols-3 lg:max-w-xl sm:gap-3">
+              {stats.map((stat, index) => (
+                <AnimatedStat key={stat.label} {...stat} index={index} />
+              ))}
             </div>
-          </div>
-          <div className="mt-14 grid gap-3 sm:grid-cols-3">
-            {trustSignals.map(({ icon: Icon, label }) => (
-              <Card key={label} className="border-white/20 bg-white/12 text-white backdrop-blur">
-                <CardContent className="flex items-center gap-3 p-4">
-                  <Icon className="h-5 w-5 text-accent" />
-                  <span className="text-sm font-medium">{label}</span>
-                </CardContent>
-              </Card>
+          </motion.aside>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden bg-earth-night pb-16 text-white sm:pb-20" aria-labelledby="discovery-title">
+        <div className="container relative">
+          <motion.div
+            className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr] lg:items-end"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={containerVariants}
+          >
+            <motion.div variants={itemVariants}>
+              <p className="eyebrow text-accent">Discovery</p>
+              <h2 className="mt-3 max-w-xl font-display text-3xl font-semibold leading-tight sm:text-4xl" id="discovery-title">
+                Des expériences prêtes à vivre, pensées pour mobile.
+              </h2>
+            </motion.div>
+            <motion.div className="grid gap-3 sm:grid-cols-3" variants={containerVariants}>
+              {trustSignals.map(({ icon: Icon, label, detail }) => (
+                <motion.div
+                  key={label}
+                  className="rounded-2xl border border-white/12 bg-white/[0.10] p-4 backdrop-blur-md"
+                  variants={itemVariants}
+                  whileHover={{ y: -5 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 22 }}
+                >
+                  <Icon className="h-5 w-5 text-accent" aria-hidden="true" />
+                  <p className="mt-3 text-sm font-bold">{label}</p>
+                  <p className="mt-1 text-xs leading-5 text-white/64">{detail}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            className="mt-8 grid gap-4 md:grid-cols-3"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={containerVariants}
+          >
+            {discoveryCards.map((card) => (
+              <DiscoveryCard key={card.title} {...card} />
             ))}
-          </div>
+          </motion.div>
+
+          <motion.div
+            className="mt-6 flex flex-col gap-4 rounded-[1.75rem] border border-white/12 bg-white/[0.10] p-5 shadow-glow backdrop-blur-md sm:flex-row sm:items-center sm:justify-between sm:p-6"
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ type: "spring", stiffness: 90, damping: 18 }}
+          >
+            <div className="flex items-start gap-4">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-accent text-accent-foreground">
+                <Award className="h-6 w-6" aria-hidden="true" />
+              </span>
+              <div>
+                <p className="font-display text-xl font-semibold">Expérience recommandée par les visiteurs</p>
+                <p className="mt-1 text-sm leading-6 text-white/70">
+                  Itinéraires vérifiés, groupes limités, guides naturalistes et conseils météo avant départ.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 rounded-2xl bg-white/10 px-4 py-3">
+              <UsersRound className="h-5 w-5 text-accent" aria-hidden="true" />
+              <div>
+                <p className="text-sm font-bold">12k explorateurs</p>
+                <p className="text-xs text-white/60">ont préparé leur visite</p>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
     </PageTransition>
