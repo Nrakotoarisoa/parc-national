@@ -84,11 +84,11 @@
   }
 
   .premium-surface {
-    @apply border border-white/50 bg-card/[0.92] shadow-soft backdrop-blur dark:border-white/10 dark:bg-card/[0.88];
+    @apply border border-border/70 bg-card/[0.96] backdrop-blur dark:border-white/10 dark:bg-card/[0.88];
   }
 
   .interactive-lift {
-    @apply transition duration-300 ease-spring hover:-translate-y-1 hover:shadow-premium;
+    @apply transition duration-300 ease-spring hover:border-primary/35 hover:bg-card;
   }
 
   .text-balance {

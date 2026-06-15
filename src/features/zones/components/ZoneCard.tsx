@@ -30,7 +30,7 @@ export function ZoneCard({ isFavorite = false, onToggleFavorite, zone }: ZoneCar
             <img
               src={heroImage}
               alt={zone.nom}
-              className="aspect-[4/3] w-full object-cover transition duration-700 ease-spring group-hover:scale-110"
+              className="aspect-[4/3] w-full object-cover transition duration-700 ease-spring"
               loading="lazy"
             />
             <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-earth-night/80 to-transparent" />
