@@ -116,9 +116,8 @@ function AnimatedNumber({ value, delay }: { value: number; delay: number }) {
 function AnimatedStat({ value, suffix, label, index }: (typeof stats)[number] & { index: number }) {
   return (
     <motion.div
-      className="rounded-2xl border border-white/15 bg-white/[0.11] p-4 shadow-glow backdrop-blur-md sm:p-5"
+      className="rounded-2xl border border-white/15 bg-white/[0.11] p-4 backdrop-blur-md sm:p-5"
       variants={itemVariants}
-      whileHover={{ y: -6, scale: 1.02 }}
       transition={{ type: "spring", stiffness: 260, damping: 20 }}
     >
       <div className="flex items-end gap-1 font-display text-3xl font-semibold text-white sm:text-4xl">
@@ -139,9 +138,8 @@ function AnimatedStat({ value, suffix, label, index }: (typeof stats)[number] & 
 function SearchPanel() {
   return (
     <motion.form
-      className="premium-surface w-full rounded-[1.75rem] border-white/25 bg-white/[0.94] p-3 text-foreground shadow-[0_28px_90px_rgb(0_0_0_/_0.24)] sm:p-4 lg:max-w-xl"
+      className="premium-surface w-full rounded-[1.75rem] border-white/25 bg-white/[0.94] p-3 text-foreground sm:p-4 lg:max-w-xl"
       variants={itemVariants}
-      whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 220, damping: 24 }}
       aria-label="Rechercher une expérience dans le parc"
       onSubmit={(event) => event.preventDefault()}
@@ -177,7 +175,7 @@ function SearchPanel() {
         {quickSearches.map((search) => (
           <button
             key={search}
-            className="shrink-0 rounded-full border border-primary/10 bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary transition duration-300 ease-spring hover:-translate-y-0.5 hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="shrink-0 rounded-full border border-primary/10 bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary transition duration-300 ease-spring hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             type="button"
           >
             {search}
@@ -190,13 +188,13 @@ function SearchPanel() {
 
 function DiscoveryCard({ icon: Icon, title, description, meta, to }: (typeof discoveryCards)[number]) {
   return (
-    <motion.article variants={itemVariants} whileHover={{ y: -8 }} transition={{ type: "spring", stiffness: 260, damping: 22 }}>
+    <motion.article variants={itemVariants} transition={{ type: "spring", stiffness: 260, damping: 22 }}>
       <Link
         to={to}
-        className="group block h-full rounded-[1.5rem] border border-white/12 bg-white/[0.11] p-4 text-white shadow-glow backdrop-blur-md transition duration-300 ease-spring hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:p-5"
+        className="group block h-full rounded-[1.5rem] border border-white/12 bg-white/[0.11] p-4 text-white backdrop-blur-md transition duration-300 ease-spring hover:bg-white/[0.16] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 sm:p-5"
       >
         <div className="mb-5 flex items-center justify-between gap-4">
-          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 text-accent transition duration-300 group-hover:scale-110 group-hover:bg-accent group-hover:text-accent-foreground">
+          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 text-accent transition duration-300 group-hover:bg-accent group-hover:text-accent-foreground">
             <Icon className="h-6 w-6" aria-hidden="true" />
           </span>
           <Badge className="border-white/15 bg-white/12 text-white" variant="outline">
@@ -206,7 +204,7 @@ function DiscoveryCard({ icon: Icon, title, description, meta, to }: (typeof dis
         <h3 className="font-display text-xl font-semibold">{title}</h3>
         <p className="mt-2 text-sm leading-6 text-white/72">{description}</p>
         <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-accent">
-          Découvrir <ChevronRight className="h-4 w-4 transition group-hover:translate-x-1" aria-hidden="true" />
+          Découvrir <ChevronRight className="h-4 w-4 transition" aria-hidden="true" />
         </span>
       </Link>
     </motion.article>
@@ -238,7 +236,7 @@ export function HomePage() {
         <div className="container relative grid min-h-screen content-center gap-10 pb-14 pt-28 sm:pb-18 lg:grid-cols-[minmax(0,1fr)_minmax(370px,0.72fr)] lg:items-end lg:gap-12 lg:pt-32">
           <motion.div className="max-w-4xl" initial="hidden" animate="visible" variants={containerVariants}>
             <motion.div className="mb-5 flex flex-wrap items-center gap-3" variants={itemVariants}>
-              <Badge className="border-white/20 bg-white/12 px-3 py-2 text-white shadow-glow backdrop-blur" variant="outline">
+              <Badge className="border-white/20 bg-white/12 px-3 py-2 text-white backdrop-blur" variant="outline">
                 <Sparkles className="h-4 w-4 text-accent" aria-hidden="true" /> Sélection premium 2026
               </Badge>
               <span className="inline-flex items-center gap-1 rounded-full bg-white/12 px-3 py-2 text-sm font-semibold text-white/90 backdrop-blur">
@@ -315,7 +313,6 @@ export function HomePage() {
                   key={label}
                   className="rounded-2xl border border-white/12 bg-white/[0.10] p-4 backdrop-blur-md"
                   variants={itemVariants}
-                  whileHover={{ y: -5 }}
                   transition={{ type: "spring", stiffness: 260, damping: 22 }}
                 >
                   <Icon className="h-5 w-5 text-accent" aria-hidden="true" />
@@ -339,7 +336,7 @@ export function HomePage() {
           </motion.div>
 
           <motion.div
-            className="mt-6 flex flex-col gap-4 rounded-[1.75rem] border border-white/12 bg-white/[0.10] p-5 shadow-glow backdrop-blur-md sm:flex-row sm:items-center sm:justify-between sm:p-6"
+            className="mt-6 flex flex-col gap-4 rounded-[1.75rem] border border-white/12 bg-white/[0.10] p-5 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between sm:p-6"
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}

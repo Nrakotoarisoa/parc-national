@@ -18,7 +18,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
-        display: ["Fraunces", "Georgia", "serif"],
+        display: ["Inter", "Source Sans 3", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -74,10 +74,10 @@ export default {
         sm: "0.375rem",
       },
       boxShadow: {
-        soft: "0 18px 50px rgb(16 24 20 / 0.10)",
-        premium: "0 24px 70px rgb(16 24 20 / 0.16)",
-        lift: "0 10px 30px rgb(16 24 20 / 0.12)",
-        glow: "0 0 0 1px rgb(255 255 255 / 0.16), 0 22px 60px rgb(2 44 34 / 0.25)",
+        soft: "0 1px 2px rgb(16 24 20 / 0.04)",
+        premium: "0 1px 2px rgb(16 24 20 / 0.04)",
+        lift: "0 1px 2px rgb(16 24 20 / 0.04)",
+        glow: "0 0 0 1px rgb(255 255 255 / 0.14)",
       },
       backgroundImage: {
         "gradient-canopy": "linear-gradient(135deg, hsl(var(--earth-forest)) 0%, hsl(var(--earth-moss)) 52%, hsl(var(--earth-river)) 100%)",

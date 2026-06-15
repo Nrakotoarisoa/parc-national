@@ -29,16 +29,16 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/50 bg-background/86 shadow-[0_8px_30px_rgb(16_24_20_/_0.06)] backdrop-blur-xl dark:border-white/10">
+    <header className="sticky top-0 z-40 border-b border-white/50 bg-background/86 backdrop-blur-xl dark:border-white/10">
       <div className="container flex h-16 items-center justify-between gap-4 lg:h-[4.5rem]">
         <Link to={routes.home} className="flex items-center gap-2 font-bold">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-canopy text-primary-foreground shadow-lift">
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-canopy text-primary-foreground">
             <Leaf className="h-5 w-5" aria-hidden="true" />
           </span>
           <span className="font-display text-xl font-semibold">{APP_NAME}</span>
         </Link>
 
-        <nav className="hidden items-center gap-1 rounded-full border bg-card/72 p-1 shadow-sm backdrop-blur md:flex">
+        <nav className="hidden items-center gap-1 rounded-full border bg-card/72 p-1 backdrop-blur md:flex">
           {links.map((link) => (
             <NavLink
               key={link.to}
@@ -46,7 +46,7 @@ export function Header() {
               className={({ isActive }) =>
                 cn(
                   "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground transition duration-300 ease-spring hover:bg-muted hover:text-foreground",
-                  isActive && "bg-primary text-primary-foreground shadow-lift hover:bg-primary hover:text-primary-foreground",
+                  isActive && "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
                 )
               }
             >
@@ -124,7 +124,7 @@ export function Header() {
           </NavLink>
         </nav>
       ) : null}
-      <nav className="safe-bottom-nav fixed inset-x-0 bottom-0 z-50 grid grid-cols-4 border-t bg-card/94 px-2 pt-2 shadow-[0_-12px_30px_rgb(16_24_20_/_0.10)] backdrop-blur-xl md:hidden">
+      <nav className="safe-bottom-nav fixed inset-x-0 bottom-0 z-50 grid grid-cols-4 border-t bg-card/94 px-2 pt-2 backdrop-blur-xl md:hidden">
         {[
           { to: routes.home, label: "Explorer", icon: Compass },
           ...links,
