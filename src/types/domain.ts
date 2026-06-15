@@ -14,6 +14,9 @@ export type Zone = {
   description_zone: string;
   disponibilite: boolean;
   image_url: string;
+  rating?: number;
+  review_count?: number;
+  tags?: string[];
 };
 
 export type Activity = {
