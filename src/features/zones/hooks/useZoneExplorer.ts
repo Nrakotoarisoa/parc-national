@@ -9,11 +9,11 @@ const normalize = (value: string) =>
     .replace(/[\u0300-\u036f]/g, "");
 
 function getZoneRating(zone: Zone) {
-  return zone.rating ?? 4.2 + (zone.id_zone % 7) / 10;
+  return zone.rating ?? 0;
 }
 
 function getZoneReviewCount(zone: Zone) {
-  return zone.review_count ?? 24 + zone.id_zone * 9;
+  return zone.review_count ?? 0;
 }
 
 export function useZoneExplorer(zones: Zone[] | undefined, query: string, availability: ZoneAvailabilityFilter, sort: ZoneSort) {

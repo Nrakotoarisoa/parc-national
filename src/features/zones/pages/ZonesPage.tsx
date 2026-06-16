@@ -16,12 +16,6 @@ import { useZoneExplorer } from "@/features/zones/hooks/useZoneExplorer";
 import { toggleZoneFavorite } from "@/features/zones/slices/zoneFavoritesSlice";
 import type { ZoneAvailabilityFilter, ZoneSort } from "@/features/zones/types";
 
-const discoveryHighlights = [
-  { icon: Trees, label: "Parcours immersifs", value: "12+" },
-  { icon: Sparkles, label: "Expériences premium", value: "4.8/5" },
-  { icon: Heart, label: "Favoris voyageurs", value: "1k+" },
-];
-
 export function ZonesPage() {
   const dispatch = useAppDispatch();
   const favoriteIds = useAppSelector((state) => state.zoneFavorites.ids);
@@ -35,6 +29,11 @@ export function ZonesPage() {
     sort,
   });
   const filteredZones = useZoneExplorer(zones, debouncedQuery, availability, sort);
+  const discoveryHighlights = [
+    { icon: Trees, label: "Zones référencées", value: zones?.length ?? 0 },
+    { icon: Sparkles, label: "Résultats affichés", value: filteredZones.length },
+    { icon: Heart, label: "Favoris", value: favoriteIds.length },
+  ];
 
   return (
     <PageTransition>

@@ -8,7 +8,6 @@ import {
   Menu,
   MessageCircle,
   Route,
-  Search,
   ShieldCheck,
   UserRound,
   X,
@@ -16,7 +15,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { APP_NAME, routes } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { useAppSelector } from "@/hooks/redux";
+import { logout } from "@/features/auth/slices/authSlice";
+import { openAuthDialog } from "@/features/auth/slices/authDialogSlice";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 
 const links = [
   { to: routes.zones, label: "Zones", icon: Map },
@@ -25,8 +26,10 @@ const links = [
 ];
 
 export function Header() {
+  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/80 bg-card/95 backdrop-blur-xl dark:border-white/10">
@@ -57,32 +60,55 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button className="border border-border bg-background" variant="ghost" size="icon" aria-label="Rechercher">
-            <Search className="h-4 w-4" />
-          </Button>
           {user ? (
-            <>
-              <Button asChild variant="outline" className="hidden sm:inline-flex">
-                <Link to={routes.reservations}>
-                  <CalendarCheck className="h-4 w-4" />
-                  Réservations
-                </Link>
+            <div className="relative">
+              <Button
+                className="border border-border bg-background pl-2 pr-3"
+                variant="ghost"
+                aria-expanded={isUserMenuOpen}
+                aria-haspopup="menu"
+                onClick={() => setIsUserMenuOpen((value) => !value)}
+              >
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-extrabold text-primary-foreground">
+                  {user.nom.slice(0, 1).toUpperCase()}
+                </span>
+                <span className="hidden max-w-28 truncate sm:inline">{user.nom}</span>
               </Button>
-              {user.role === "admin" ? (
-                <Button asChild variant="secondary" className="hidden sm:inline-flex">
-                  <Link to={routes.admin}>
-                    <ShieldCheck className="h-4 w-4" />
-                    Admin
+              {isUserMenuOpen ? (
+                <div className="absolute right-0 top-12 z-50 w-64 rounded-2xl border bg-card p-2 shadow-soft" role="menu">
+                  <div className="border-b px-3 py-3">
+                    <p className="truncate font-bold">{user.nom}</p>
+                    <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+                  </div>
+                  <Link className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold hover:bg-muted" to={routes.profile} onClick={() => setIsUserMenuOpen(false)}>
+                    <UserRound className="h-4 w-4" /> Profil
                   </Link>
-                </Button>
+                  <Link className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold hover:bg-muted" to={routes.reservations} onClick={() => setIsUserMenuOpen(false)}>
+                    <CalendarCheck className="h-4 w-4" /> Réservations
+                  </Link>
+                  {user.role === "admin" ? (
+                    <Link className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-semibold hover:bg-muted" to={routes.admin} onClick={() => setIsUserMenuOpen(false)}>
+                      <ShieldCheck className="h-4 w-4" /> Admin
+                    </Link>
+                  ) : null}
+                  <button
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm font-semibold text-destructive hover:bg-muted"
+                    role="menuitem"
+                    type="button"
+                    onClick={() => {
+                      dispatch(logout());
+                      setIsUserMenuOpen(false);
+                    }}
+                  >
+                    Déconnexion
+                  </button>
+                </div>
               ) : null}
-            </>
+            </div>
           ) : (
-            <Button asChild className="hidden sm:inline-flex">
-              <Link to={routes.login}>
-                <UserRound className="h-4 w-4" />
-                Connexion
-              </Link>
+            <Button className="hidden sm:inline-flex" onClick={() => dispatch(openAuthDialog({ mode: "login" }))}>
+              <UserRound className="h-4 w-4" />
+              Connexion
             </Button>
           )}
           <Button
@@ -114,14 +140,26 @@ export function Header() {
               {link.label}
             </NavLink>
           ))}
-          <NavLink
-            to={user ? routes.reservations : routes.login}
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-muted-foreground hover:bg-muted hover:text-foreground"
-          >
-            {user ? <CalendarCheck className="h-4 w-4" /> : <UserRound className="h-4 w-4" />}
-            {user ? "Mes réservations" : "Connexion"}
-          </NavLink>
+          {user ? (
+            <NavLink
+              to={routes.reservations}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold text-muted-foreground hover:bg-muted hover:text-foreground"
+            >
+              <CalendarCheck className="h-4 w-4" /> Mes réservations
+            </NavLink>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                dispatch(openAuthDialog({ mode: "login" }));
+              }}
+              className="flex items-center gap-3 rounded-xl px-3 py-3 text-left text-sm font-semibold text-muted-foreground hover:bg-muted hover:text-foreground"
+            >
+              <UserRound className="h-4 w-4" /> Connexion
+            </button>
+          )}
         </nav>
       ) : null}
       <nav className="safe-bottom-nav fixed inset-x-0 bottom-0 z-50 grid grid-cols-4 border-t bg-card/96 px-2 pt-2 backdrop-blur-xl md:hidden">

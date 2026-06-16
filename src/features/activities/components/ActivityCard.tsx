@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { CalendarPlus, Clock3, Leaf, Star, UsersRound } from "lucide-react";
+import { CalendarPlus, Clock3, Leaf, UsersRound } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -22,9 +22,8 @@ export function ActivityCard({ activity }: ActivityCardProps) {
             </Badge>
             <h2 className="line-clamp-2 text-base font-extrabold tracking-[-0.01em]">Expérience {activity.type.toLowerCase()}</h2>
           </div>
-          <span className="inline-flex items-center gap-1 rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 text-sm font-bold text-foreground">
-            <Star className="h-4 w-4 fill-accent text-accent" aria-hidden="true" />
-            4.8
+          <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
+            Disponible
           </span>
         </div>
 
