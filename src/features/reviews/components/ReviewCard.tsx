@@ -19,11 +19,11 @@ export function ReviewCard({ index = 0, review }: ReviewCardProps) {
       viewport={{ once: true, margin: "-40px" }}
       transition={{ type: "spring", stiffness: 120, damping: 18, delay: Math.min(index * 0.04, 0.18) }}
     >
-      <Card className="premium-surface interactive-lift overflow-hidden">
-        <CardContent className="p-5 sm:p-6">
+      <Card className="premium-surface interactive-lift overflow-hidden rounded-2xl">
+        <CardContent className="p-5">
           <div className="flex items-start justify-between gap-4">
             <div className="flex min-w-0 items-center gap-3">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-canopy text-sm font-bold text-white shadow-lift">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-canopy text-sm font-bold text-white">
                 {(review.utilisateur?.nom ?? "Visiteur").slice(0, 1).toUpperCase()}
               </div>
               <div className="min-w-0">
@@ -39,7 +39,7 @@ export function ReviewCard({ index = 0, review }: ReviewCardProps) {
             <Quote className="h-5 w-5 text-primary/35" aria-hidden="true" />
           </div>
 
-          <p className="mt-4 text-sm leading-7 text-muted-foreground sm:text-[0.95rem]">{review.commentaire}</p>
+          <p className="mt-3 text-sm leading-7 text-muted-foreground sm:text-[0.95rem]">{review.commentaire}</p>
         </CardContent>
       </Card>
     </motion.article>

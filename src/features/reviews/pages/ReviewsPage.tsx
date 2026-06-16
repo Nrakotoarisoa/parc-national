@@ -26,15 +26,15 @@ export function ReviewsPage() {
           />
 
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <div className="premium-surface rounded-xl p-4">
+            <div className="premium-surface rounded-2xl p-4">
               <p className="text-2xl font-bold">{averageRating ? averageRating.toFixed(1) : "--"}</p>
               <p className="text-sm text-muted-foreground">Note moyenne</p>
             </div>
-            <div className="premium-surface rounded-xl p-4">
+            <div className="premium-surface rounded-2xl p-4">
               <p className="text-2xl font-bold">{reviews?.length ?? 0}</p>
               <p className="text-sm text-muted-foreground">Avis publiés</p>
             </div>
-            <div className="premium-surface rounded-xl p-4">
+            <div className="premium-surface rounded-2xl p-4">
               <div className="flex items-center gap-2 text-primary">
                 <ShieldCheck className="h-5 w-5" />
                 <p className="font-bold">Vérifié</p>
@@ -44,16 +44,16 @@ export function ReviewsPage() {
           </div>
 
           <div className="mt-8 grid gap-4">
-          {isLoading ? <LoadingGrid /> : null}
-          {isError ? <ErrorState onRetry={refetch} /> : null}
-          {!isLoading && !isError && reviews?.length === 0 ? (
-            <EmptyState
-              icon={MessageCircle}
-              title="Aucun avis pour le moment"
-              message="Soyez le premier visiteur à partager une impression utile pour les futurs explorateurs."
-            />
-          ) : null}
-          {reviews?.map((review, index) => <ReviewCard key={review.id_avis} index={index} review={review} />)}
+            {isLoading ? <LoadingGrid /> : null}
+            {isError ? <ErrorState onRetry={refetch} /> : null}
+            {!isLoading && !isError && reviews?.length === 0 ? (
+              <EmptyState
+                icon={MessageCircle}
+                title="Aucun avis pour le moment"
+                message="Soyez le premier visiteur à partager une impression utile pour les futurs explorateurs."
+              />
+            ) : null}
+            {reviews?.map((review, index) => <ReviewCard key={review.id_avis} index={index} review={review} />)}
           </div>
         </div>
 

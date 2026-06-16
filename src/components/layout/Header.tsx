@@ -29,23 +29,23 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/50 bg-background/86 backdrop-blur-xl dark:border-white/10">
-      <div className="container flex h-16 items-center justify-between gap-4 lg:h-[4.5rem]">
+    <header className="sticky top-0 z-40 border-b border-border/80 bg-card/95 backdrop-blur-xl dark:border-white/10">
+      <div className="container flex h-16 items-center justify-between gap-3 lg:h-[4.25rem]">
         <Link to={routes.home} className="flex items-center gap-2 font-bold">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-canopy text-primary-foreground">
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
             <Leaf className="h-5 w-5" aria-hidden="true" />
           </span>
-          <span className="font-display text-xl font-semibold">{APP_NAME}</span>
+          <span className="font-display text-xl font-extrabold tracking-[-0.03em]">{APP_NAME}</span>
         </Link>
 
-        <nav className="hidden items-center gap-1 rounded-full border bg-card/72 p-1 backdrop-blur md:flex">
+        <nav className="hidden items-center gap-1 rounded-full border bg-background p-1 md:flex">
           {links.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
               className={({ isActive }) =>
                 cn(
-                  "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground transition duration-300 ease-spring hover:bg-muted hover:text-foreground",
+                  "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground transition duration-200 ease-spring hover:bg-muted hover:text-foreground",
                   isActive && "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
                 )
               }
@@ -57,7 +57,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button className="rounded-full" variant="ghost" size="icon" aria-label="Rechercher">
+          <Button className="border border-border bg-background" variant="ghost" size="icon" aria-label="Rechercher">
             <Search className="h-4 w-4" />
           </Button>
           {user ? (
@@ -97,7 +97,7 @@ export function Header() {
         </div>
       </div>
       {isMobileMenuOpen ? (
-        <nav className="container grid gap-2 border-t py-3 md:hidden">
+        <nav className="container grid gap-2 border-t bg-card py-3 md:hidden">
           {links.map((link) => (
             <NavLink
               key={link.to}
@@ -124,7 +124,7 @@ export function Header() {
           </NavLink>
         </nav>
       ) : null}
-      <nav className="safe-bottom-nav fixed inset-x-0 bottom-0 z-50 grid grid-cols-4 border-t bg-card/94 px-2 pt-2 backdrop-blur-xl md:hidden">
+      <nav className="safe-bottom-nav fixed inset-x-0 bottom-0 z-50 grid grid-cols-4 border-t bg-card/96 px-2 pt-2 backdrop-blur-xl md:hidden">
         {[
           { to: routes.home, label: "Explorer", icon: Compass },
           ...links,
