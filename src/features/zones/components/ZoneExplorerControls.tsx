@@ -37,7 +37,7 @@ export function ZoneExplorerControls({
   onSortChange,
 }: ZoneExplorerControlsProps) {
   return (
-    <div className="premium-surface sticky top-20 z-20 rounded-3xl p-4 sm:p-5">
+    <div className="premium-surface sticky top-20 z-20 rounded-2xl p-3 sm:p-4">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
         <label className="relative flex-1">
           <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -45,7 +45,7 @@ export function ZoneExplorerControls({
             value={query}
             onChange={(event) => onQueryChange(event.target.value)}
             placeholder="Rechercher une forêt, une cascade, une zone..."
-            className="h-12 rounded-2xl pl-11"
+            className="h-12 rounded-full bg-background pl-11"
           />
         </label>
         <div className="flex items-center gap-2 overflow-x-auto pb-1">
@@ -64,8 +64,8 @@ export function ZoneExplorerControls({
           ))}
         </div>
       </div>
-      <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Badge variant="outline" className="w-fit rounded-full px-3 py-1">
+      <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <Badge variant="outline" className="w-fit rounded-full bg-primary/5 px-3 py-1 text-primary">
           {resultCount} expérience{resultCount > 1 ? "s" : ""} trouvée{resultCount > 1 ? "s" : ""}
         </Badge>
         <div className="flex gap-2 overflow-x-auto pb-1">
