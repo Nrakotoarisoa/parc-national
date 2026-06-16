@@ -45,7 +45,7 @@ export type Review = {
   id_utilisateur: number;
   note: number;
   commentaire: string;
-  date_publication: string;
+  date_publication?: string | null;
   utilisateur?: Pick<User, "nom">;
 };
 
