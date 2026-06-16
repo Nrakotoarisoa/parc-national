@@ -134,57 +134,6 @@ function AnimatedStat({ value, suffix, label, index }: Stat & { index: number })
   );
 }
 
-function SearchPanel() {
-  return (
-    <motion.form
-      className="premium-surface w-full rounded-[1.75rem] border-white/25 bg-white/[0.94] p-3 text-foreground sm:p-4 lg:max-w-xl"
-      variants={itemVariants}
-      transition={{ type: "spring", stiffness: 220, damping: 24 }}
-      aria-label="Rechercher une expérience dans le parc"
-      onSubmit={(event) => event.preventDefault()}
-    >
-      <div className="grid gap-3 md:grid-cols-[1.1fr_0.9fr_auto]">
-        <label className="group relative block">
-          <span className="mb-2 flex items-center gap-2 px-2 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
-            <MapPin className="h-3.5 w-3.5 text-primary" aria-hidden="true" /> Destination
-          </span>
-          <Input
-            className="h-14 rounded-2xl border-transparent bg-muted/70 pl-11 text-base shadow-inner transition group-hover:bg-muted focus-visible:ring-primary"
-            placeholder="Forêt, cascade, belvédère..."
-            aria-label="Destination souhaitée"
-          />
-          <Search className="pointer-events-none absolute bottom-4 left-4 h-5 w-5 text-primary" aria-hidden="true" />
-        </label>
-        <label className="group block">
-          <span className="mb-2 flex items-center gap-2 px-2 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
-            <CalendarDays className="h-3.5 w-3.5 text-primary" aria-hidden="true" /> Quand
-          </span>
-          <Input
-            className="h-14 rounded-2xl border-transparent bg-muted/70 text-base shadow-inner transition group-hover:bg-muted focus-visible:ring-primary"
-            type="date"
-            aria-label="Date de visite"
-          />
-        </label>
-        <Button className="h-14 rounded-2xl px-6 text-base" size="lg" type="submit" variant="premium">
-          Explorer
-          <ChevronRight className="h-5 w-5" aria-hidden="true" />
-        </Button>
-      </div>
-      <div className="mt-4 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] sm:flex-wrap sm:overflow-visible">
-        {quickSearches.map((search) => (
-          <button
-            key={search}
-            className="shrink-0 rounded-full border border-primary/10 bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary transition duration-300 ease-spring hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            type="button"
-          >
-            {search}
-          </button>
-        ))}
-      </div>
-    </motion.form>
-  );
-}
-
 function DiscoveryCard({ icon: Icon, title, description, meta, to }: (typeof discoveryCards)[number]) {
   return (
     <motion.article variants={itemVariants} transition={{ type: "spring", stiffness: 260, damping: 22 }}>
@@ -290,7 +239,6 @@ export function HomePage() {
             variants={containerVariants}
             aria-label="Recherche, confiance et statistiques du parc"
           >
-            <SearchPanel />
             <div className="grid w-full grid-cols-1 gap-2 min-[430px]:grid-cols-3 lg:max-w-xl sm:gap-3">
               {stats.map((stat, index) => (
                 <AnimatedStat key={stat.label} {...stat} index={index} />

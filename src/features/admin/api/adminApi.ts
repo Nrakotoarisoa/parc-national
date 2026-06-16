@@ -4,15 +4,15 @@ import type { Activity, AdminStats, Zone } from "@/types/domain";
 export const adminApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAdminStats: builder.query<AdminStats, void>({
-      query: () => ({ url: "/api/admin/stats" }),
+      query: () => ({ url: "/api/admin/statistiques" }),
       providesTags: ["AdminStats"],
     }),
     createAdminZone: builder.mutation<Zone, Omit<Zone, "id_zone">>({
-      query: (data) => ({ url: "/api/admin/zones", method: "POST", data }),
+      query: (data) => ({ url: "/api/zones", method: "POST", data }),
       invalidatesTags: ["Zone", "AdminStats"],
     }),
     createAdminActivity: builder.mutation<Activity, Omit<Activity, "id_activite" | "zone">>({
-      query: (data) => ({ url: "/api/admin/activites", method: "POST", data }),
+      query: (data) => ({ url: "/api/activites", method: "POST", data }),
       invalidatesTags: ["Activity", "AdminStats"],
     }),
   }),
