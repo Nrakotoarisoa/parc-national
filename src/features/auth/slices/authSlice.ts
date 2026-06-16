@@ -15,10 +15,10 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setCredentials: (state, action: PayloadAction<{ token: string; user: User }>) => {
-      state.token = action.payload.token;
-      state.user = action.payload.user;
-      localStorage.setItem("auth_token", action.payload.token);
+    setCredentials: (state, action: PayloadAction<{ access_token: string; utilisateur: User }>) => {
+      state.token = action.payload.access_token;
+      state.user = action.payload.utilisateur;
+      localStorage.setItem("auth_token", action.payload.access_token);
     },
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
