@@ -2,8 +2,7 @@ import { baseApi } from "@/app/store/baseApi";
 import type { Activity, Reservation, Zone } from "@/types/domain";
 
 export type AdminZonePayload = Omit<Zone, "id_zone" | "rating" | "review_count" | "tags" | "image_url"> & {
-  image?: File | null;
-  image_url?: string;
+  image_url?: File | string | null;
 };
 export type AdminActivityPayload = Omit<Activity, "id_activite" | "zone">;
 export type AdminReservationPayload = Partial<Pick<Reservation, "date_debut" | "date_fin" | "statut">>;
@@ -14,8 +13,7 @@ function zoneToFormData(data: Partial<AdminZonePayload>) {
   if (data.nom !== undefined) formData.append("nom", data.nom);
   if (data.description_zone !== undefined) formData.append("description_zone", data.description_zone);
   if (data.disponibilite !== undefined) formData.append("disponibilite", String(data.disponibilite));
-  if (data.image instanceof File) formData.append("image", data.image);
-  if (!data.image && data.image_url) formData.append("image_url", data.image_url);
+  if (data.image_url instanceof File) formData.append("image_url", data.image_url);
 
   return formData;
 }
