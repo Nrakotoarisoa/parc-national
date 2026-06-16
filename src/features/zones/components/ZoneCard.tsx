@@ -24,13 +24,13 @@ export function ZoneCard({ isFavorite = false, onToggleFavorite, zone }: ZoneCar
 
   return (
     <motion.article layout initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
-      <Card className="group h-full overflow-hidden rounded-3xl premium-surface interactive-lift">
+      <Card className="group h-full overflow-hidden rounded-2xl premium-surface interactive-lift">
         <div className="relative overflow-hidden">
           <Link to={`/zones/${zone.id_zone}`} aria-label={`Découvrir ${zone.nom}`}>
             <img
               src={heroImage}
               alt={zone.nom}
-              className="aspect-[4/3] w-full object-cover transition duration-700 ease-spring"
+              className="aspect-[4/3] w-full object-cover"
               loading="lazy"
             />
             <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-earth-night/80 to-transparent" />
@@ -63,12 +63,12 @@ export function ZoneCard({ isFavorite = false, onToggleFavorite, zone }: ZoneCar
             </span>
           </div>
         </div>
-        <CardContent className="space-y-4 p-4 sm:p-5">
+        <CardContent className="space-y-3 p-4">
           <div>
-            <Link to={`/zones/${zone.id_zone}`} className="text-lg font-bold hover:text-primary">
+            <Link to={`/zones/${zone.id_zone}`} className="text-base font-extrabold tracking-[-0.01em] hover:text-primary">
               {zone.nom}
             </Link>
-            <p className="mt-2 line-clamp-3 text-sm leading-6 text-muted-foreground">{zone.description_zone}</p>
+            <p className="mt-1.5 line-clamp-2 text-sm leading-6 text-muted-foreground">{zone.description_zone}</p>
           </div>
           <div className="grid grid-cols-3 gap-2">
             {meta.gallery.slice(0, 3).map((image, index) => (
@@ -76,13 +76,13 @@ export function ZoneCard({ isFavorite = false, onToggleFavorite, zone }: ZoneCar
                 key={`${zone.id_zone}-${image}`}
                 src={image}
                 alt={`${zone.nom} aperçu ${index + 1}`}
-                className="aspect-square rounded-2xl object-cover"
+                className="aspect-[4/3] rounded-xl object-cover"
                 loading="lazy"
               />
             ))}
           </div>
-          <Button asChild variant="premium" className="w-full rounded-2xl">
-            <Link to={`/zones/${zone.id_zone}`}>Explorer les avis et activités</Link>
+          <Button asChild variant="premium" className="w-full">
+            <Link to={`/zones/${zone.id_zone}`}>Voir les détails</Link>
           </Button>
         </CardContent>
       </Card>

@@ -21,22 +21,21 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageTransition } from "@/components/layout/PageTransition";
+import { useGetActivitiesQuery } from "@/features/activities/api/activitiesApi";
+import { useGetReviewsQuery } from "@/features/reviews/api/reviewsApi";
+import { useGetZonesQuery } from "@/features/zones/api/zonesApi";
 import { routes } from "@/lib/constants";
 
 const heroImage =
   "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=2200&q=82";
 
 const trustSignals = [
-  { icon: ShieldCheck, label: "Guides certifiés", detail: "Partenaires locaux vérifiés" },
-  { icon: Star, label: "4,9/5 visiteurs", detail: "Avis authentifiés" },
-  { icon: CheckCircle2, label: "Annulation flexible", detail: "Réservation sécurisée" },
+  { icon: ShieldCheck, label: "Compte sécurisé", detail: "Authentification requise avant réservation" },
+  { icon: Star, label: "Avis visiteurs", detail: "Notes issues des avis publiés" },
+  { icon: CheckCircle2, label: "Réservation connectée", detail: "Flux relié aux APIs existantes" },
 ];
 
-const stats = [
-  { value: "42", label: "sentiers balisés", suffix: "+" },
-  { value: "18", label: "expériences guidées", suffix: "" },
-  { value: "97", label: "satisfaction visiteurs", suffix: "%" },
-];
+type Stat = { value: string; label: string; suffix: string };
 
 const discoveryCards = [
   {
@@ -113,7 +112,7 @@ function AnimatedNumber({ value, delay }: { value: number; delay: number }) {
   return <span ref={ref}>{displayValue}</span>;
 }
 
-function AnimatedStat({ value, suffix, label, index }: (typeof stats)[number] & { index: number }) {
+function AnimatedStat({ value, suffix, label, index }: Stat & { index: number }) {
   return (
     <motion.div
       className="rounded-2xl border border-white/15 bg-white/[0.11] p-4 backdrop-blur-md sm:p-5"
@@ -126,7 +125,7 @@ function AnimatedStat({ value, suffix, label, index }: (typeof stats)[number] & 
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.45 + index * 0.08, type: "spring", stiffness: 110, damping: 18 }}
         >
-          <AnimatedNumber delay={0.45 + index * 0.08} value={Number(value)} />
+          {suffix === "/5" ? value : <AnimatedNumber delay={0.45 + index * 0.08} value={Number(value)} />}
         </motion.span>
         <span className="pb-1 text-xl text-accent">{suffix}</span>
       </div>
@@ -212,6 +211,15 @@ function DiscoveryCard({ icon: Icon, title, description, meta, to }: (typeof dis
 }
 
 export function HomePage() {
+  const { data: zones } = useGetZonesQuery();
+  const { data: activities } = useGetActivitiesQuery();
+  const { data: reviews } = useGetReviewsQuery();
+  const averageRating = reviews?.length ? reviews.reduce((total, review) => total + review.note, 0) / reviews.length : 0;
+  const stats: Stat[] = [
+    { value: String(zones?.length ?? 0), label: "zones disponibles", suffix: "" },
+    { value: String(activities?.length ?? 0), label: "expériences", suffix: "" },
+    { value: averageRating ? averageRating.toFixed(1) : "0", label: "note moyenne", suffix: "/5" },
+  ];
   const prefersReducedMotion = useReducedMotion();
   const { scrollY } = useScroll();
   const rawY = useTransform(scrollY, [0, 700], [0, prefersReducedMotion ? 0 : 90]);
@@ -237,10 +245,10 @@ export function HomePage() {
           <motion.div className="max-w-4xl" initial="hidden" animate="visible" variants={containerVariants}>
             <motion.div className="mb-5 flex flex-wrap items-center gap-3" variants={itemVariants}>
               <Badge className="border-white/20 bg-white/12 px-3 py-2 text-white backdrop-blur" variant="outline">
-                <Sparkles className="h-4 w-4 text-accent" aria-hidden="true" /> Sélection premium 2026
+                <Sparkles className="h-4 w-4 text-accent" aria-hidden="true" /> Sélection du parc
               </Badge>
               <span className="inline-flex items-center gap-1 rounded-full bg-white/12 px-3 py-2 text-sm font-semibold text-white/90 backdrop-blur">
-                <Star className="h-4 w-4 fill-accent text-accent" aria-hidden="true" /> 4,9 · 2 400 avis voyageurs
+                <Star className="h-4 w-4 fill-accent text-accent" aria-hidden="true" /> {averageRating ? averageRating.toFixed(1) : "--"} · {reviews?.length ?? 0} avis
               </span>
             </motion.div>
 
@@ -356,8 +364,8 @@ export function HomePage() {
             <div className="flex items-center gap-4 rounded-2xl bg-white/10 px-4 py-3">
               <UsersRound className="h-5 w-5 text-accent" aria-hidden="true" />
               <div>
-                <p className="text-sm font-bold">12k explorateurs</p>
-                <p className="text-xs text-white/60">ont préparé leur visite</p>
+                <p className="text-sm font-bold">{zones?.length ?? 0} zones</p>
+                <p className="text-xs text-white/60">à explorer dans le parc</p>
               </div>
             </div>
           </motion.div>
