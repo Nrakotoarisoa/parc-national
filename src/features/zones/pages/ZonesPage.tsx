@@ -1,4 +1,4 @@
-import { Compass, Heart, Sparkles, Trees } from "lucide-react";
+import { Heart, Sparkles, Trees } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { EmptyState } from "@/components/feedback/EmptyState";
@@ -6,7 +6,6 @@ import { ErrorState } from "@/components/feedback/ErrorState";
 import { LoadingGrid } from "@/components/feedback/LoadingGrid";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useGetZonesQuery } from "@/features/zones/api/zonesApi";
@@ -42,20 +41,12 @@ export function ZonesPage() {
         <div className="container relative py-8 sm:py-12 lg:py-16">
           <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
-              <Badge className="mb-4 rounded-full px-3 py-1">Inspiré par les meilleurs guides voyageurs</Badge>
-              <h1 className="display-title max-w-3xl">Zones du Parc à découvrir comme sur un carnet de voyage premium.</h1>
+              <Badge className="mb-4 rounded-full px-3 py-1">Découverte, biodiversité et écotourisme</Badge>
+              <h1 className="display-title max-w-3xl">Explorez les zones naturelles du parc national.</h1>
               <p className="mt-4 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
-                Recherchez, filtrez, comparez les notes, consultez les avis et gardez vos zones favorites pour préparer
-                une exploration naturelle fluide, mobile-first et immersive.
+                Recherchez les forêts, cascades et sentiers ouverts, comparez les avis des visiteurs et préparez une
+                aventure respectueuse de la biodiversité locale.
               </p>
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <Button className="rounded-full" size="lg">
-                  <Compass className="h-4 w-4" /> Lancer l'exploration
-                </Button>
-                <Button variant="outline" className="rounded-full" size="lg">
-                  Voir les favoris ({favoriteIds.length})
-                </Button>
-              </div>
             </motion.div>
             <div className="grid grid-cols-3 gap-3">
               {discoveryHighlights.map((item) => (
@@ -79,6 +70,7 @@ export function ZonesPage() {
           onAvailabilityChange={setAvailability}
           onQueryChange={setQuery}
           onSortChange={setSort}
+          favoriteCount={favoriteIds.length}
         />
 
         {isLoading ? <LoadingGrid /> : null}

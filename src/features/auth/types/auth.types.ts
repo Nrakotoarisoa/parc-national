@@ -10,6 +10,6 @@ export type RegisterRequest = LoginRequest & {
 };
 
 export type AuthResponse = {
-  token: string;
-  user: User;
+  access_token: string;
+  utilisateur: User;
 };

@@ -1,4 +1,4 @@
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Heart, Search, SlidersHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +25,7 @@ type ZoneExplorerControlsProps = {
   onAvailabilityChange: (value: ZoneAvailabilityFilter) => void;
   onQueryChange: (value: string) => void;
   onSortChange: (value: ZoneSort) => void;
+  favoriteCount: number;
 };
 
 export function ZoneExplorerControls({
@@ -35,6 +36,7 @@ export function ZoneExplorerControls({
   onAvailabilityChange,
   onQueryChange,
   onSortChange,
+  favoriteCount,
 }: ZoneExplorerControlsProps) {
   return (
     <div className="premium-surface sticky top-20 z-20 rounded-2xl p-3 sm:p-4">
@@ -68,7 +70,10 @@ export function ZoneExplorerControls({
         <Badge variant="outline" className="w-fit rounded-full bg-primary/5 px-3 py-1 text-primary">
           {resultCount} expérience{resultCount > 1 ? "s" : ""} trouvée{resultCount > 1 ? "s" : ""}
         </Badge>
-        <div className="flex gap-2 overflow-x-auto pb-1">
+        <div className="flex flex-wrap gap-2 overflow-x-auto pb-1">
+          <Button type="button" size="sm" variant="outline" className="shrink-0 rounded-full border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100">
+            <Heart className="h-4 w-4" /> Voir les favoris ({favoriteCount})
+          </Button>
           {sortOptions.map((option) => (
             <Button
               key={option.value}
