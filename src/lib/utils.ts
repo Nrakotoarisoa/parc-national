@@ -13,8 +13,18 @@ export function formatPrice(value: number) {
   }).format(value);
 }
 
-export function formatDate(value: string) {
+export function formatDate(
+  value?: string | number | Date | null,
+  labels: { missingLabel?: string; invalidLabel?: string } = {},
+) {
+  const { missingLabel = "Date indisponible", invalidLabel = "Date invalide" } = labels;
+
+  if (value === undefined || value === null || value === "") return missingLabel;
+
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) return invalidLabel;
+
   return new Intl.DateTimeFormat("fr-FR", {
     dateStyle: "medium",
-  }).format(new Date(value));
+  }).format(date);
 }

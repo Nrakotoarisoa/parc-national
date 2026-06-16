@@ -3,15 +3,12 @@ import { Link } from "react-router-dom";
 import { animate, motion, useInView, useReducedMotion, useScroll, useSpring, useTransform, type Variants } from "framer-motion";
 import {
   Award,
-  CalendarDays,
   Camera,
   CheckCircle2,
   ChevronRight,
   Leaf,
-  MapPin,
   Mountain,
   Play,
-  Search,
   ShieldCheck,
   Sparkles,
   Star,
@@ -19,7 +16,6 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { useGetActivitiesQuery } from "@/features/activities/api/activitiesApi";
 import { useGetReviewsQuery } from "@/features/reviews/api/reviewsApi";
@@ -60,8 +56,6 @@ const discoveryCards = [
     to: routes.zones,
   },
 ];
-
-const quickSearches = ["Lever du soleil", "Cascade", "Famille", "Observation faune"];
 
 const containerVariants = {
   hidden: { opacity: 0 },
