@@ -11,6 +11,7 @@ import { useLoginMutation, useRegisterMutation } from "@/features/auth/api/authA
 import { closeAuthDialog, setAuthDialogMode } from "@/features/auth/slices/authDialogSlice";
 import { setCredentials } from "@/features/auth/slices/authSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useToast } from "@/components/ui/toast";
 
 const loginDialogSchema = z.object({
   email: z.string().email("Email invalide"),
@@ -41,6 +42,7 @@ export function AuthDialog() {
   const loginForm = useForm<LoginDialogValues>({ resolver: zodResolver(loginDialogSchema) });
   const registerForm = useForm<RegisterDialogValues>({ resolver: zodResolver(registerDialogSchema) });
   const isLogin = mode === "login";
+  const { toast } = useToast();
 
   const finishAuthentication = (response: Parameters<typeof setCredentials>[0]) => {
     dispatch(setCredentials(response));
@@ -56,13 +58,39 @@ export function AuthDialog() {
   };
 
   const submitLogin = async (values: LoginDialogValues) => {
-    const response = await login(values).unwrap();
-    finishAuthentication(response);
+    try {
+      const response = await login(values).unwrap();
+      finishAuthentication(response);
+      toast({
+        title: "Connexion réussie.",
+        description: "Bienvenue dans votre espace personnel.",
+        variant: "success",
+      });
+    } catch {
+      toast({
+        title: "Impossible de se connecter.",
+        description: "Vérifiez vos identifiants.",
+        variant: "error",
+      });
+    }
   };
 
   const submitRegister = async ({ confirmation: _confirmation, prenom, nom, ...values }: RegisterDialogValues) => {
-    const response = await registerUser({ ...values, nom: `${prenom} ${nom}`.trim() }).unwrap();
-    finishAuthentication(response);
+    try {
+      const response = await registerUser({ ...values, nom: `${prenom} ${nom}`.trim() }).unwrap();
+      finishAuthentication(response);
+      toast({
+        title: "Inscription réussie.",
+        description: "Bienvenue dans votre espace personnel.",
+        variant: "success",
+      });
+    } catch {
+      toast({
+        title: "Impossible de créer un compte.",
+        description: "Vérifiez vos informations et réessayez.",
+        variant: "error",
+      });
+    }
   };
 
   return (

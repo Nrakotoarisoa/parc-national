@@ -13,7 +13,7 @@ export const reservationsApi = baseApi.injectEndpoints({
       providesTags: ["Reservation"],
     }),
     cancelReservation: builder.mutation<Reservation, number>({
-      query: (id) => ({ url: `/api/reservations/${id}`, method: "PUT" }),
+      query: (id) => ({ url: `/api/reservations/${id}`, method: "DELETE" }),
       invalidatesTags: ["Reservation"],
     }),
   }),

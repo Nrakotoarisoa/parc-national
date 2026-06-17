@@ -71,7 +71,7 @@ export function ProfilePage() {
                       Du {formatDate(reservation.date_debut)} au {formatDate(reservation.date_fin)}
                     </p>
                   </div>
-                  <Badge variant={reservation.statut === "annule" ? "outline" : "trust"}>{reservation.statut}</Badge>
+                  <Badge variant={reservation.statut === "paye" ? "outline" : "destructive"}>{reservation.statut === "paye" ? "Payée" : "Non payée"}</Badge>
                 </div>
               ))}
             </CardContent>

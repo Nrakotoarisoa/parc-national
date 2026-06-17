@@ -8,7 +8,8 @@ export function cn(...inputs: ClassValue[]) {
 export function formatPrice(value: number) {
   return new Intl.NumberFormat("fr-FR", {
     style: "currency",
-    currency: "EUR",
+    currency: "MGA",
+    currencyDisplay: "narrowSymbol",
     maximumFractionDigits: 0,
   }).format(value);
 }

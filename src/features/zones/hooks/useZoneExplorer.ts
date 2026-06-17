@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import type { Zone } from "@/types/domain";
-import type { ZoneAvailabilityFilter, ZoneSort } from "@/features/zones/types";
+import type { ZoneAvailabilityFilter, ZoneFavoritesFilter, ZoneSort } from "@/features/zones/types";
 
 const normalize = (value: string) =>
   value
@@ -16,7 +16,7 @@ function getZoneReviewCount(zone: Zone) {
   return zone.review_count ?? 0;
 }
 
-export function useZoneExplorer(zones: Zone[] | undefined, query: string, availability: ZoneAvailabilityFilter, sort: ZoneSort) {
+export function useZoneExplorer(zones: Zone[] | undefined, query: string, availability: ZoneAvailabilityFilter, sort: ZoneSort, favoritesFilter: ZoneFavoritesFilter, favoriteIds: number[] = []) {
   return useMemo(() => {
     const normalizedQuery = normalize(query.trim());
 
@@ -27,10 +27,12 @@ export function useZoneExplorer(zones: Zone[] | undefined, query: string, availa
           : true;
         const matchesAvailability =
           availability === "all" ||
-          (availability === "available" && zone.disponibilite) ||
-          (availability === "unavailable" && !zone.disponibilite);
+          (availability === "available" && zone.disponibilite === "dispo") ||
+          (availability === "unavailable" && zone.disponibilite !== "non_dispo");
+        const matchesFavorites =
+          favoritesFilter === "all" || (favoritesFilter === "favorites" && favoriteIds.includes(zone.id_zone));
 
-        return matchesQuery && matchesAvailability;
+        return matchesQuery && matchesAvailability && matchesFavorites;
       })
       .sort((first, second) => {
         if (sort === "rating") return getZoneRating(second) - getZoneRating(first);
@@ -38,10 +40,12 @@ export function useZoneExplorer(zones: Zone[] | undefined, query: string, availa
         if (sort === "name") return first.nom.localeCompare(second.nom, "fr");
         return Number(second.disponibilite) - Number(first.disponibilite) || getZoneRating(second) - getZoneRating(first);
       });
-  }, [availability, query, sort, zones]);
+  }, [availability, favoritesFilter, favoriteIds, query, sort, zones]);
 }
 
 export function getZoneMeta(zone: Zone) {
+  console.log(zone.image_url);
+
   return {
     rating: getZoneRating(zone),
     reviewCount: getZoneReviewCount(zone),

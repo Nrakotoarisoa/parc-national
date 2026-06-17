@@ -1,7 +1,6 @@
-import { Heart, MapPin, MessageCircle } from "lucide-react";
+import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Rating } from "@/components/common/Rating";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,6 +20,7 @@ type ZoneCardProps = {
 export function ZoneCard({ isFavorite = false, onToggleFavorite, zone }: ZoneCardProps) {
   const meta = getZoneMeta(zone);
   const heroImage = meta.gallery[0] || fallbackZoneImage;
+  console.log(meta.gallery);
 
   return (
     <motion.article layout initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
@@ -36,11 +36,9 @@ export function ZoneCard({ isFavorite = false, onToggleFavorite, zone }: ZoneCar
             <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-earth-night/80 to-transparent" />
           </Link>
           <div className="absolute left-3 top-3 flex flex-wrap gap-2">
-            <Badge className="rounded-full bg-background/90 text-foreground backdrop-blur">
-              <MapPin className="mr-1 h-3 w-3" /> Zone du parc
-            </Badge>
-            <Badge variant={zone.disponibilite ? "default" : "outline"} className="rounded-full backdrop-blur">
-              {zone.disponibilite ? "Disponible" : "Indisponible"}
+
+            <Badge variant={zone.disponibilite === "dispo" ? "default" : "outline"} className="rounded-full backdrop-blur">
+              {zone.disponibilite === "dispo" ? "Disponible" : "Indisponible"}
             </Badge>
           </div>
           <Button
@@ -56,12 +54,6 @@ export function ZoneCard({ isFavorite = false, onToggleFavorite, zone }: ZoneCar
           >
             <Heart className={cn("h-5 w-5", isFavorite && "fill-accent text-accent")} />
           </Button>
-          <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-3 text-white">
-            <Rating value={meta.rating} size="sm" className="rounded-full bg-earth-night/60 px-2 py-1 backdrop-blur" />
-            <span className="inline-flex items-center gap-1 rounded-full bg-earth-night/60 px-2 py-1 text-xs font-semibold backdrop-blur">
-              <MessageCircle className="h-3.5 w-3.5" /> {meta.reviewCount} avis
-            </span>
-          </div>
         </div>
         <CardContent className="space-y-3 p-4">
           <div>

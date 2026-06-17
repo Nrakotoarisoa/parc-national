@@ -1,7 +1,8 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { CalendarCheck, Leaf, Map, MessageSquare, Route } from "lucide-react";
+import { ArrowLeft, CalendarCheck, Leaf, Map, MessageSquare, Route } from "lucide-react";
 import { routes } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const navItems = [
   { label: "Zones", to: `${routes.admin}#zones`, icon: Map },
@@ -24,23 +25,15 @@ export function AdminLayout() {
               <p className="text-xs text-stone-500">Gestion simple du parc</p>
             </div>
           </div>
-          <nav className="flex gap-1 overflow-x-auto text-sm" aria-label="Navigation administrateur">
-            {navItems.map(({ label, to, icon: Icon }) => (
-              <NavLink
-                key={label}
-                to={to}
-                className={({ isActive }) =>
-                  cn(
-                    "flex shrink-0 items-center gap-2 rounded-xl bg-transparent px-3 py-2 font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-900",
-                    isActive && "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-700",
-                  )
-                }
-              >
-                <Icon className="h-4 w-4" />
-                {label}
+          <div className="flex items-center gap-2 overflow-x-auto">
+            
+            <Button asChild variant="ghost" size="sm" className="shrink-0 rounded-full whitespace-nowrap">
+              <NavLink to={routes.home} className="flex items-center gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                Retour à l'espace client
               </NavLink>
-            ))}
-          </nav>
+            </Button>
+          </div>
         </div>
       </header>
       <main className="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">

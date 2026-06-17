@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { CalendarPlus, Clock3, Leaf, UsersRound } from "lucide-react";
+import { CalendarPlus, Leaf} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,27 +18,14 @@ export function ActivityCard({ activity }: ActivityCardProps) {
           <div className="space-y-2">
             <Badge variant="accent" className="rounded-full px-3 py-1">
               <Leaf className="h-3.5 w-3.5" aria-hidden="true" />
-              {activity.type}
+              Tous les zones
             </Badge>
-            <h2 className="line-clamp-2 text-base font-extrabold tracking-[-0.01em]">Expérience {activity.type.toLowerCase()}</h2>
+            <h2 className="line-clamp-2 text-base font-extrabold tracking-[-0.01em]">{activity.type}</h2>
           </div>
-          <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
-            Disponible
-          </span>
         </div>
 
         <p className="mt-3 line-clamp-3 flex-1 text-sm leading-6 text-muted-foreground">{activity.description_act}</p>
 
-        <div className="mt-4 grid grid-cols-2 gap-2 text-xs font-semibold text-muted-foreground">
-          <span className="inline-flex items-center gap-1.5 rounded-xl bg-muted/70 px-3 py-2">
-            <Clock3 className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-            Demi-journée
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-xl bg-muted/70 px-3 py-2">
-            <UsersRound className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-            Petit groupe
-          </span>
-        </div>
 
         <div className="mt-4 flex items-center justify-between gap-3 border-t pt-4">
           <div>

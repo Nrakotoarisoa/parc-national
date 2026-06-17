@@ -2,7 +2,7 @@ import { Heart, Search, SlidersHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { ZoneAvailabilityFilter, ZoneSort } from "@/features/zones/types";
+import type { ZoneAvailabilityFilter, ZoneFavoritesFilter, ZoneSort } from "@/features/zones/types";
 
 const availabilityOptions: Array<{ label: string; value: ZoneAvailabilityFilter }> = [
   { label: "Toutes", value: "all" },
@@ -11,18 +11,17 @@ const availabilityOptions: Array<{ label: string; value: ZoneAvailabilityFilter 
 ];
 
 const sortOptions: Array<{ label: string; value: ZoneSort }> = [
-  { label: "Recommandées", value: "recommended" },
-  { label: "Mieux notées", value: "rating" },
-  { label: "Plus d'avis", value: "reviews" },
   { label: "A-Z", value: "name" },
 ];
 
 type ZoneExplorerControlsProps = {
   availability: ZoneAvailabilityFilter;
+  favoritesFilter: ZoneFavoritesFilter;
   query: string;
   resultCount: number;
   sort: ZoneSort;
   onAvailabilityChange: (value: ZoneAvailabilityFilter) => void;
+  onFavoritesFilterChange: (value: ZoneFavoritesFilter) => void;
   onQueryChange: (value: string) => void;
   onSortChange: (value: ZoneSort) => void;
   favoriteCount: number;
@@ -30,10 +29,12 @@ type ZoneExplorerControlsProps = {
 
 export function ZoneExplorerControls({
   availability,
+  favoritesFilter,
   query,
   resultCount,
   sort,
   onAvailabilityChange,
+  onFavoritesFilterChange,
   onQueryChange,
   onSortChange,
   favoriteCount,
@@ -46,7 +47,7 @@ export function ZoneExplorerControls({
           <Input
             value={query}
             onChange={(event) => onQueryChange(event.target.value)}
-            placeholder="Rechercher une forêt, une cascade, une zone..."
+            placeholder="Rechercher une zone, description..."
             className="h-12 rounded-full bg-background pl-11"
           />
         </label>
@@ -71,8 +72,14 @@ export function ZoneExplorerControls({
           {resultCount} expérience{resultCount > 1 ? "s" : ""} trouvée{resultCount > 1 ? "s" : ""}
         </Badge>
         <div className="flex flex-wrap gap-2 overflow-x-auto pb-1">
-          <Button type="button" size="sm" variant="outline" className="shrink-0 rounded-full border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100">
-            <Heart className="h-4 w-4" /> Voir les favoris ({favoriteCount})
+          <Button
+            type="button"
+            size="sm"
+            variant={favoritesFilter === "favorites" ? "default" : "outline"}
+            onClick={() => onFavoritesFilterChange(favoritesFilter === "favorites" ? "all" : "favorites")}
+            className="shrink-0 rounded-full"
+          >
+            <Heart className={favoritesFilter === "favorites" ? "h-4 w-4 fill-current" : "h-4 w-4"} /> Favoris ({favoriteCount})
           </Button>
           {sortOptions.map((option) => (
             <Button

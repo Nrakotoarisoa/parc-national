@@ -13,13 +13,14 @@ import { ZoneCard } from "@/features/zones/components/ZoneCard";
 import { ZoneExplorerControls } from "@/features/zones/components/ZoneExplorerControls";
 import { useZoneExplorer } from "@/features/zones/hooks/useZoneExplorer";
 import { toggleZoneFavorite } from "@/features/zones/slices/zoneFavoritesSlice";
-import type { ZoneAvailabilityFilter, ZoneSort } from "@/features/zones/types";
+import type { ZoneAvailabilityFilter, ZoneFavoritesFilter, ZoneSort } from "@/features/zones/types";
 
 export function ZonesPage() {
   const dispatch = useAppDispatch();
   const favoriteIds = useAppSelector((state) => state.zoneFavorites.ids);
   const [query, setQuery] = useState("");
   const [availability, setAvailability] = useState<ZoneAvailabilityFilter>("all");
+  const [favoritesFilter, setFavoritesFilter] = useState<ZoneFavoritesFilter>("all");
   const [sort, setSort] = useState<ZoneSort>("recommended");
   const debouncedQuery = useDebounce(query, 250);
   const { data: zones, isError, isFetching, isLoading, refetch } = useGetZonesQuery({
@@ -27,7 +28,7 @@ export function ZonesPage() {
     availability,
     sort,
   });
-  const filteredZones = useZoneExplorer(zones, debouncedQuery, availability, sort);
+  const filteredZones = useZoneExplorer(zones, debouncedQuery, availability, sort, favoritesFilter, favoriteIds);
   const discoveryHighlights = [
     { icon: Trees, label: "Zones référencées", value: zones?.length ?? 0 },
     { icon: Sparkles, label: "Résultats affichés", value: filteredZones.length },
@@ -64,10 +65,12 @@ export function ZonesPage() {
       <section className="container space-y-8 py-8 sm:py-10">
         <ZoneExplorerControls
           availability={availability}
+          favoritesFilter={favoritesFilter}
           query={query}
           resultCount={filteredZones.length}
           sort={sort}
           onAvailabilityChange={setAvailability}
+          onFavoritesFilterChange={setFavoritesFilter}
           onQueryChange={setQuery}
           onSortChange={setSort}
           favoriteCount={favoriteIds.length}

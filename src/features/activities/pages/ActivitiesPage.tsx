@@ -22,15 +22,6 @@ export function ActivitiesPage() {
               Retrouvez les expériences du parc avec informations essentielles, prix, durée indicative et accès rapide à la réservation.
             </p>
           </div>
-          <div className="premium-surface rounded-2xl p-3">
-            <label className="relative block">
-              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" aria-hidden="true" />
-              <Input className="h-12 rounded-full bg-background pl-11" placeholder="Rechercher une activité, un thème..." aria-label="Rechercher une activité" />
-            </label>
-            <div className="mt-3 flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-              <Compass className="h-4 w-4 text-primary" aria-hidden="true" /> {activities?.length ?? 0} expériences disponibles
-            </div>
-          </div>
         </div>
 
         <div className="mt-8">

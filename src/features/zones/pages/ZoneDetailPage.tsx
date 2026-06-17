@@ -3,7 +3,9 @@ import { ErrorState } from "@/components/feedback/ErrorState";
 import { LoadingGrid } from "@/components/feedback/LoadingGrid";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ChevronLeft } from "lucide-react";
 import { useGetZoneQuery } from "@/features/zones/api/zonesApi";
+import { routes } from "@/lib/constants";
 
 export function ZoneDetailPage() {
   const id = Number(useParams().id);
@@ -14,6 +16,14 @@ export function ZoneDetailPage() {
 
   return (
     <section className="container py-10">
+      <div className="mb-6">
+        <Button asChild variant="ghost" className="rounded-full">
+          <Link to={routes.zones}>
+            <ChevronLeft className="mr-2 h-4 w-4" />
+            Retour aux zones
+          </Link>
+        </Button>
+      </div>
       <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
         <img src={zone.image_url} alt={zone.nom} className="aspect-[16/10] rounded-lg object-cover shadow-soft" />
         <div className="self-center">

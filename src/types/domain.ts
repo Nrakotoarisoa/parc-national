@@ -12,7 +12,7 @@ export type Zone = {
   id_zone: number;
   nom: string;
   description_zone: string;
-  disponibilite: boolean;
+  disponibilite: "dispo" | "non_dispo";
   image_url: string;
   rating?: number;
   review_count?: number;
@@ -45,7 +45,7 @@ export type Review = {
   id_utilisateur: number;
   note: number;
   commentaire: string;
-  date_publication?: string | null;
+  date_creation: string;
   utilisateur?: Pick<User, "nom">;
 };
 

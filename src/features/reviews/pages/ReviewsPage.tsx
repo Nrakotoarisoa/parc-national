@@ -4,6 +4,7 @@ import { ErrorState } from "@/components/feedback/ErrorState";
 import { EmptyState } from "@/components/feedback/EmptyState";
 import { LoadingGrid } from "@/components/feedback/LoadingGrid";
 import { SectionHeading } from "@/components/common/SectionHeading";
+import { useToast } from "@/components/ui/toast";
 import { ReviewCard } from "@/features/reviews/components/ReviewCard";
 import { ReviewForm } from "@/features/reviews/components/ReviewForm";
 import { useCreateReviewMutation, useGetReviewsQuery } from "@/features/reviews/api/reviewsApi";
@@ -11,6 +12,7 @@ import { useCreateReviewMutation, useGetReviewsQuery } from "@/features/reviews/
 export function ReviewsPage() {
   const { data: reviews, isError, isLoading, refetch } = useGetReviewsQuery();
   const [createReview, createState] = useCreateReviewMutation();
+  const { toast } = useToast();
   const averageRating = reviews?.length
     ? reviews.reduce((total, review) => total + review.note, 0) / reviews.length
     : 0;
@@ -68,7 +70,21 @@ export function ReviewsPage() {
           <ReviewForm
             isLoading={createState.isLoading}
             onSubmit={async (values) => {
-              await createReview(values).unwrap();
+              try {
+                await createReview(values).unwrap();
+                toast({
+                  title: "Avis publié avec succès.",
+                  description: "Merci pour votre retour d'expérience.",
+                  variant: "success",
+                });
+              } catch {
+                toast({
+                  title: "Impossible de publier votre avis.",
+                  description: "Veuillez réessayer.",
+                  variant: "error",
+                });
+                throw new Error("Review submission failed");
+              }
             }}
           />
         </aside>

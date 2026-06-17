@@ -49,6 +49,9 @@ export const DialogContent = React.forwardRef<HTMLDivElement, React.HTMLAttribut
 );
 DialogContent.displayName = "DialogContent";
 
+export const AlertDialog = Dialog;
+export const AlertDialogContent = DialogContent;
+
 export function DialogClose({ onClick }: { onClick: () => void }) {
   return (
     <Button className="absolute right-4 top-4" size="icon" variant="ghost" aria-label="Fermer" onClick={onClick}>

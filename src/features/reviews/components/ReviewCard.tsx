@@ -1,9 +1,9 @@
 import { Quote } from "lucide-react";
 import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Rating } from "@/components/common/Rating";
 import { formatDate } from "@/lib/utils";
+import { useGetUserQuery } from "@/features/auth/api/authApi";
 import type { Review } from "@/types/domain";
 
 type ReviewCardProps = {
@@ -12,6 +12,14 @@ type ReviewCardProps = {
 };
 
 export function ReviewCard({ index = 0, review }: ReviewCardProps) {
+  const { data: user } = useGetUserQuery(review.id_utilisateur, {
+    skip: Boolean(review.utilisateur?.nom),
+  });
+
+  console.log(user);
+
+  const authorName = user?.nom ?? "Visiteur";
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 18 }}
@@ -24,14 +32,13 @@ export function ReviewCard({ index = 0, review }: ReviewCardProps) {
           <div className="flex items-start justify-between gap-4">
             <div className="flex min-w-0 items-center gap-3">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-canopy text-sm font-bold text-white">
-                {(review.utilisateur?.nom ?? "Visiteur").slice(0, 1).toUpperCase()}
+                {authorName.slice(0, 1).toUpperCase()}
               </div>
               <div className="min-w-0">
-                <p className="truncate font-semibold">{review.utilisateur?.nom ?? "Visiteur"}</p>
-                <p className="text-xs text-muted-foreground">{formatDate(review.date_publication)}</p>
+                <p className="truncate font-semibold">{authorName}</p>
+                <p className="text-xs text-muted-foreground">{formatDate(review.date_creation)}</p>
               </div>
             </div>
-            <Badge variant="trust">Avis vérifié</Badge>
           </div>
 
           <div className="mt-5 flex items-center justify-between gap-3">
